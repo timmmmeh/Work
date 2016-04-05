@@ -1,0 +1,30 @@
+#!/usr/bin/python
+import os
+t = "/home/display/Desktop/Playlist.xspf"
+#directory = "/home/display/Desktop/Photos/"
+directory = "/home/display/Pictures/"
+#directory = "smb://gabriel/graphics/"
+target = open(t, 'w')
+target.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"+"\n")
+target.write("<playlist xmlns=\"http://xspf.org/ns/0/\" xmlns:vlc=\"http://www.videolan.org/vlc/playlist/ns/0/\" version=\"1\">"+"\n")
+target.write("<title>Test</title>"+"\n")
+target.write("<trackList>"+"\n")
+for i in range(len(os.listdir(directory))):	
+	s = "<track>"+"\n"+"<location>file://"+directory
+	for l in os.listdir(directory)[i]:
+		if l == " ":
+			l = "%20"
+		s+=l
+	s+="</location>"+"\n"+"<duration>10000</duration>"+"\n"+"<extension application=\"http://www.videolan.org/vlc/playlist/0\">"+"\n"+"<vlc:id>"+str(i)+"</vlc:id>"+"\n"+"</extension>"+"\n"+"</track>"+"\n"
+	target.write(s)
+
+target.write("</trackList>"+"\n")
+target.write("<extension application=\"http://www.videolan.org/vlc/playlist/0\">"+"\n")
+for i in range(len(os.listdir(directory))):
+	target.write("<vlc:item tid=\""+str(i)+"\"/>"+"\n")
+
+target.write("</extension>"+"\n")
+target.write("</playlist>"+"\n")
+target.close
+os.system("/usr/bin/vlc file:///home/display/Desktop/Playlist.xspf")
+
